@@ -2,9 +2,13 @@ require("dotenv").config();
 import { Request, Response } from "express";
 const OAuthClient = require("intuit-oauth");
 
-const client_id: string = process.env.CLIENT_ID_QB || "";
-const client_secret: string = process.env.CLIENT_SECRET_QB || "";
-const redirectUrl: string = process.env.REDIRECT_URI_QB || "";
+// const client_id: string = process.env.CLIENT_ID_QB || "";
+// const client_secret: string = process.env.CLIENT_SECRET_QB || "";
+// const redirectUrl: string = process.env.REDIRECT_URI_QB || "";
+
+const client_id = "ABuragBLjn3nTWJItkbIJrM3u5rv4LhSYxAOpXjOIRYblaHZTL";
+const client_secret = "BfQg9HJJ3BYC8clQ4lci62aZlgo5zb9ywgW1URK3";
+const redirectUrl = "http://localhost:5000/qb/callback";
 
 const oauthClient = new OAuthClient({
   clientId: client_id,
@@ -56,7 +60,6 @@ export const QuickBookInfo = async (req: Request, res: Response) => {
       `The response for API call is :${JSON.stringify(authResponse)}`
     );
     res.send(JSON.parse(authResponse.text()));
-
   } catch (err) {
     console.log(err, "err");
     res.send("Sorry, something went wrong 2");

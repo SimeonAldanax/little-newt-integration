@@ -10,10 +10,14 @@ import { connectqb, callbackqb } from "../controllers/quickbook";
 
 const router: Router = Router();
 
-router.get("/connect", connect);
-router.get("/callback", callback);
-router.get("/xeroInfo", xeroInfo);
-router.get("/trialBalance", getTrialBalance);
+router.get("/", (req, res) => {
+  res.send(`<h1 >Little newt server alive</h1>`);
+});
+
+router.get("/xero/connect", connect);
+router.get("/xero/callback", callback);
+router.get("/xero/xeroInfo", xeroInfo);
+router.get("/xero/trialBalance", getTrialBalance);
 
 router.get("/qb/connect", connectqb);
 router.get("/qb/callback", callbackqb);

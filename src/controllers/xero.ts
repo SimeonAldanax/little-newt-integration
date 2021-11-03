@@ -24,9 +24,14 @@ declare module "express-session" {
   }
 }
 
-const client_id: string = process.env.CLIENT_ID || "";
-const client_secret: string = process.env.CLIENT_SECRET || "";
-const redirectUrl: string = process.env.REDIRECT_URI || "";
+// const client_id: string = process.env.CLIENT_ID || "";
+// const client_secret: string = process.env.CLIENT_SECRET || "";
+// const redirectUrl: string = process.env.REDIRECT_URI || "";
+
+const client_id = "20135B1E75B24F6683697D5CB8C56B5A";
+const client_secret = "e4p5Qo_p3pCgZHj-DPvxYXD_8ilrft_oaSenTpZFdLVu9o1I";
+const redirectUrl = "http://localhost:5000/callback";
+
 const scopes: string =
   "openid profile email accounting.settings accounting.reports.read accounting.journals.read accounting.contacts accounting.attachments accounting.transactions offline_access";
 
@@ -37,11 +42,11 @@ const xero = new XeroClient({
   scopes: scopes.split(" "),
 });
 
-if (client_id === "" || client_secret === "" || redirectUrl === "") {
-  throw Error(
-    "Environment Variables not all set - please check your .env file in the project root or create one!"
-  );
-}
+// if (client_id === "" || client_secret === "" || redirectUrl === "") {
+//   throw Error(
+//     "Environment Variables not all set - please check your .env file in the project root or create one!"
+//   );
+// }
 
 const Auth: any[] = [];
 
