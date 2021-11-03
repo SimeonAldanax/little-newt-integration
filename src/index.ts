@@ -27,6 +27,6 @@ app.use("/", Routes);
 // static files
 
 // starting the server
-app.listen(app.get("port"), () => {
+app.listen(process.env.PORT || 5000, () => {
   console.log("server on 5000");
 });
