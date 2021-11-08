@@ -3,11 +3,7 @@ import axios from "axios";
 import { Request, Response } from "express";
 import jwtDecode from "jwt-decode";
 import { TokenSet } from "openid-client";
-import {
-  XeroAccessToken,
-  XeroIdToken,
-  XeroClient,
-} from "xero-node";
+import { XeroAccessToken, XeroIdToken, XeroClient } from "xero-node";
 
 declare module "express-session" {
   interface Session {
@@ -26,6 +22,7 @@ declare module "express-session" {
 const client_id = "2C078C64D06B414AB6E76CF7FA78DB17";
 const client_secret = "kJ_vxDX7cjjPD09FR4nSaAKwIQwoZTUDRhEgVBGuqzeL65_5";
 const redirectUrl = "http://localhost:5000/xero/callback";
+const redirectURL = "https://littlenewtback.herokuapp.com/xero/callback";
 
 const scopes: string =
   "openid profile email accounting.settings accounting.reports.read accounting.journals.read accounting.contacts accounting.attachments accounting.transactions offline_access";
@@ -33,7 +30,7 @@ const scopes: string =
 const xero = new XeroClient({
   clientId: client_id.toString(),
   clientSecret: client_secret.toString(),
-  redirectUris: [redirectUrl.toString()],
+  redirectUris: [redirectUrl.toString(), redirectURL.toString()],
   scopes: "openid profile email accounting.transactions offline_access".split(
     " "
   ),
@@ -61,10 +58,7 @@ export const connect = async (req: Request, res: Response) => {
     //   url: `https://login.xero.com/identity/connect/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirectUrl}&scope=openid profile email accounting.transactions&state=123`,
     // });
   } catch (err) {
-    console.log(err, "fallo");
-    res.send({
-      url: `https://login.xero.com/identity/connect/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirectUrl}&scope=openid profile email accounting.transactions&state=123`,
-    });
+    res.send("Sorry, something went wrong");
   }
 };
 
@@ -114,9 +108,8 @@ export const callback = async (req: Request, res: Response) => {
     //console.log(authData, "authData");
     Auth.push(authData);
 
-    res.redirect(`http://localhost:3000/newBook/xero`);
-
-
+    //res.redirect(`http://localhost:3000/newBook/xero`);
+    res.redirect(`https://condescending-dijkstra-2075e8.netlify.app/newBook/xero`);
   } catch (err) {
     console.log(err, "err");
     res.send("Sorry, something went wrong 3");
@@ -136,7 +129,7 @@ export const xeroInfo = async (req: Request, res: Response) => {
   }
 };
 
-export const getTrialBalance = async (req: Request, res: Response) => {
+export const getJournlas = async (req: Request, res: Response) => {
   const { date } = req.query;
   //console.log(req.query, "dateDATE");
   const paymentsOnly = true;

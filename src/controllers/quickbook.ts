@@ -8,7 +8,8 @@ const OAuthClient = require("intuit-oauth");
 
 const client_id = "ABuragBLjn3nTWJItkbIJrM3u5rv4LhSYxAOpXjOIRYblaHZTL";
 const client_secret = "BfQg9HJJ3BYC8clQ4lci62aZlgo5zb9ywgW1URK3";
-const redirectUrl = "http://localhost:5000/qb/callback";
+//const redirectUrl = "http://localhost:5000/qb/callback";
+const redirectUrl = "https://littlenewtback.herokuapp.com/qb/callback";
 
 const oauthClient = new OAuthClient({
   clientId: client_id,
@@ -37,7 +38,8 @@ export const callbackqb = async (req: Request, res: Response) => {
     const response = await oauthClient.createToken(req.url);
     console.log(response, "res");
     oauth2_token_json = JSON.stringify(response.getJson(), null, 2);
-    res.redirect(`http://localhost:3000/newBook/quickbook`);
+    //res.redirect(`http://localhost:3000/newBook/quickbook`);
+    res.redirect(`https://condescending-dijkstra-2075e8.netlify.app/newBook/quickbook`);
   } catch (err) {
     console.log(err, "err");
     res.send("Sorry, something went wrong 2");

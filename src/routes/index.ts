@@ -1,12 +1,7 @@
 import { Router } from "express";
-import {
-  callback,
-  xeroInfo,
-  connect,
-  getTrialBalance,
-} from "../controllers/xero";
+import { callback, xeroInfo, connect, getJournlas } from "../controllers/xero";
 
-import { connectqb, callbackqb } from "../controllers/quickbook";
+import { connectqb, callbackqb, QuickBookInfo } from "../controllers/quickbook";
 import { login } from "../controllers/auth";
 
 const router: Router = Router();
@@ -20,9 +15,10 @@ router.post("/login", login);
 router.get("/xero/connect", connect);
 router.get("/xero/callback", callback);
 router.get("/xero/xeroInfo", xeroInfo);
-router.get("/xero/trialBalance", getTrialBalance);
+router.get("/xero/journals", getJournlas);
 
 router.get("/qb/connect", connectqb);
 router.get("/qb/callback", callbackqb);
+router.get("/qb/info", QuickBookInfo);
 
 export default router;
