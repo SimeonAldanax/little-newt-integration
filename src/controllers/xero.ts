@@ -1,4 +1,5 @@
 require("dotenv").config();
+import axios from "axios";
 import { Request, Response } from "express";
 import jwtDecode from "jwt-decode";
 import { TokenSet } from "openid-client";
@@ -6,12 +7,6 @@ import {
   XeroAccessToken,
   XeroIdToken,
   XeroClient,
-  // Contact,
-  // LineItem,
-  // Invoice,
-  // Invoices,
-  // Phone,
-  // Contacts,
 } from "xero-node";
 
 declare module "express-session" {
@@ -28,25 +23,23 @@ declare module "express-session" {
 // const client_secret: string = process.env.CLIENT_SECRET || "";
 // const redirectUrl: string = process.env.REDIRECT_URI || "";
 
-const client_id = "20135B1E75B24F6683697D5CB8C56B5A";
-const client_secret = "e4p5Qo_p3pCgZHj-DPvxYXD_8ilrft_oaSenTpZFdLVu9o1I";
-const redirectUrl = "http://localhost:5000/callback";
+const client_id = "2C078C64D06B414AB6E76CF7FA78DB17";
+const client_secret = "kJ_vxDX7cjjPD09FR4nSaAKwIQwoZTUDRhEgVBGuqzeL65_5";
+const redirectUrl = "http://localhost:5000/xero/callback";
 
 const scopes: string =
   "openid profile email accounting.settings accounting.reports.read accounting.journals.read accounting.contacts accounting.attachments accounting.transactions offline_access";
 
 const xero = new XeroClient({
-  clientId: client_id,
-  clientSecret: client_secret,
-  redirectUris: [redirectUrl],
-  scopes: scopes.split(" "),
+  clientId: client_id.toString(),
+  clientSecret: client_secret.toString(),
+  redirectUris: [redirectUrl.toString()],
+  scopes: "openid profile email accounting.transactions offline_access".split(
+    " "
+  ),
+  state: "123",
+  httpTimeout: 3000, // ms (optional)
 });
-
-// if (client_id === "" || client_secret === "" || redirectUrl === "") {
-//   throw Error(
-//     "Environment Variables not all set - please check your .env file in the project root or create one!"
-//   );
-// }
 
 const Auth: any[] = [];
 
@@ -63,18 +56,45 @@ export const authenticationData: any = (req: Request, res: Response) => {
 export const connect = async (req: Request, res: Response) => {
   try {
     const consentUrl: string = await xero.buildConsentUrl();
-    // console.log(consentUrl);
-    //res.redirect(consentUrl);
     res.send({ url: consentUrl });
+    // res.send({
+    //   url: `https://login.xero.com/identity/connect/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirectUrl}&scope=openid profile email accounting.transactions&state=123`,
+    // });
   } catch (err) {
-    console.log(err, "err");
-    res.send("Sorry, something went wrong ");
+    console.log(err, "fallo");
+    res.send({
+      url: `https://login.xero.com/identity/connect/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirectUrl}&scope=openid profile email accounting.transactions&state=123`,
+    });
   }
 };
 
 export const callback = async (req: Request, res: Response) => {
   try {
-    // console.log(req.url, "req.url");
+    // const inicio = req.url.indexOf("code=");
+    // const fin = req.url.indexOf("&");
+    // const code = req.url.substring(inicio + 5, fin);
+    // console.log(code,'code');
+
+    // const params = new URLSearchParams();
+    // params.append("grant_type", "authorization_code");
+    // params.append("code", code);
+    // params.append("redirect_uri", "http://localhost:5000/xero/callback");
+
+    // const config = {
+    //   headers: {
+    //     "Content-Type": "application/x-www-form-urlencoded",
+    //   },
+    //   auth: {
+    //     username: client_id,
+    //     password: client_secret,
+    //   },
+    // };
+    // const pepe = await axios.post(
+    //   "https://identity.xero.com/connect/token",
+    //   params,
+    //   config
+    // );
+    // console.log(pepe, "pepe");
     const tokenSet: TokenSet = await xero.apiCallback(req.url);
     // console.log(tokenSet, "tokenSet");
     await xero.updateTenants();
@@ -95,9 +115,11 @@ export const callback = async (req: Request, res: Response) => {
     Auth.push(authData);
 
     res.redirect(`http://localhost:3000/newBook/xero`);
+
+
   } catch (err) {
     console.log(err, "err");
-    res.send("Sorry, something went wrong 2");
+    res.send("Sorry, something went wrong 3");
   }
 };
 
