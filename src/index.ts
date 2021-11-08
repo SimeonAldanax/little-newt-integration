@@ -1,5 +1,6 @@
 import express from "express";
 import Routes from "./routes";
+import cors from "cors";
 const session = require("express-session");
 
 // initialization
@@ -13,6 +14,24 @@ app.use(
     cookie: { secure: false },
   })
 );
+
+const getOptionsCors = () => {
+  const whitelist = [``];
+  const corsOptions = {
+    origin: (origin: any, callback: any) => {
+      callback(null, true);
+      // if (whitelist.indexOf(origin) !== -1) {
+      //   callback(null, true);
+      // } else {
+      //   callback(new Error("Not allowed by CORS"));
+      // }
+    },
+    credentials: true,
+    exposedHeaders: ["filename"],
+  };
+  return corsOptions;
+};
+app.use(cors(getOptionsCors()));
 
 //settings
 app.set("port", 5000);
