@@ -64,34 +64,12 @@ export const connect = async (req: Request, res: Response) => {
 
 export const callback = async (req: Request, res: Response) => {
   try {
-    // const inicio = req.url.indexOf("code=");
-    // const fin = req.url.indexOf("&");
-    // const code = req.url.substring(inicio + 5, fin);
-    // console.log(code,'code');
-
-    // const params = new URLSearchParams();
-    // params.append("grant_type", "authorization_code");
-    // params.append("code", code);
-    // params.append("redirect_uri", "http://localhost:5000/xero/callback");
-
-    // const config = {
-    //   headers: {
-    //     "Content-Type": "application/x-www-form-urlencoded",
-    //   },
-    //   auth: {
-    //     username: client_id,
-    //     password: client_secret,
-    //   },
-    // };
-    // const pepe = await axios.post(
-    //   "https://identity.xero.com/connect/token",
-    //   params,
-    //   config
-    // );
-    // console.log(pepe, "pepe");
     const tokenSet: TokenSet = await xero.apiCallback(req.url);
-    // console.log(tokenSet, "tokenSet");
+    console.log(req.url, "req.url");
+
     await xero.updateTenants();
+
+    console.log("updateTenants");
 
     const decodedIdToken: XeroIdToken = jwtDecode(tokenSet.id_token!);
     const decodedAccessToken: XeroAccessToken = jwtDecode(
@@ -105,7 +83,6 @@ export const callback = async (req: Request, res: Response) => {
     req.session.activeTenant = xero.tenants[0];
 
     const authData: any = authenticationData(req, res);
-    //console.log(authData, "authData");
     Auth.push(authData);
 
     //res.redirect(`http://localhost:3000/newBook/xero`);
@@ -113,8 +90,10 @@ export const callback = async (req: Request, res: Response) => {
       `https://condescending-dijkstra-2075e8.netlify.app/newBook/xero`
     );
   } catch (err) {
+    console.log("desde aqui");
     console.log(err, "err");
-    res.send("Sorry, something went wrong 3");
+    console.error(err);
+    res.send("Sorry, something went wrong !!");
   }
 };
 
