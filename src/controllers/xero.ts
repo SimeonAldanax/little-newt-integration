@@ -31,9 +31,7 @@ const xero = new XeroClient({
   clientId: client_id.toString(),
   clientSecret: client_secret.toString(),
   redirectUris: [redirectURL.toString(), redirectUrl.toString()],
-  scopes: "openid profile email accounting.transactions offline_access".split(
-    " "
-  ),
+  scopes: scopes.split(" "),
   state: "123",
   httpTimeout: 3000, // ms (optional)
 });
@@ -54,9 +52,6 @@ export const connect = async (req: Request, res: Response) => {
   try {
     const consentUrl: string = await xero.buildConsentUrl();
     res.send({ url: consentUrl });
-    // res.send({
-    //   url: `https://login.xero.com/identity/connect/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirectUrl}&scope=openid profile email accounting.transactions&state=123`,
-    // });
   } catch (err) {
     res.send("Sorry, something went wrong");
   }
@@ -67,8 +62,9 @@ export const callback = async (req: Request, res: Response) => {
     const tokenSet: TokenSet = await xero.apiCallback(req.url);
     console.log(req.url, "req.url");
 
-    await xero.updateTenants();
+    console.log(tokenSet.expired() ? "expired" : "valid");
 
+    await xero.updateTenants();
     console.log("updateTenants");
 
     const decodedIdToken: XeroIdToken = jwtDecode(tokenSet.id_token!);
@@ -85,14 +81,12 @@ export const callback = async (req: Request, res: Response) => {
     const authData: any = authenticationData(req, res);
     Auth.push(authData);
 
-    //res.redirect(`http://localhost:3000/newBook/xero`);
+    // res.redirect(`http://localhost:3000/newBook/xero`);
     res.redirect(
       `https://condescending-dijkstra-2075e8.netlify.app/newBook/xero`
     );
-  } catch (err) {
-    console.log("desde aqui");
-    console.log(err, "err");
-    console.error(err);
+  } catch (err) {    
+    console.log(JSON.stringify(err), "err");
     res.send("Sorry, something went wrong !!");
   }
 };
