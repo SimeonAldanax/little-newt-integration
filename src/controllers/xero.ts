@@ -30,7 +30,7 @@ const scopes: string =
 const xero = new XeroClient({
   clientId: client_id.toString(),
   clientSecret: client_secret.toString(),
-  redirectUris: [redirectUrl.toString(), redirectURL.toString()],
+  redirectUris: [redirectURL.toString(), redirectUrl.toString()],
   scopes: "openid profile email accounting.transactions offline_access".split(
     " "
   ),
@@ -109,7 +109,9 @@ export const callback = async (req: Request, res: Response) => {
     Auth.push(authData);
 
     //res.redirect(`http://localhost:3000/newBook/xero`);
-    res.redirect(`https://condescending-dijkstra-2075e8.netlify.app/newBook/xero`);
+    res.redirect(
+      `https://condescending-dijkstra-2075e8.netlify.app/newBook/xero`
+    );
   } catch (err) {
     console.log(err, "err");
     res.send("Sorry, something went wrong 3");
