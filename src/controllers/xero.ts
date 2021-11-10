@@ -1,5 +1,4 @@
 require("dotenv").config();
-import axios from "axios";
 import { Request, Response } from "express";
 import jwtDecode from "jwt-decode";
 import { TokenSet } from "openid-client";
@@ -30,7 +29,7 @@ const scopes: string =
 const xero = new XeroClient({
   clientId: client_id.toString(),
   clientSecret: client_secret.toString(),
-  redirectUris: [redirectURL.toString(), redirectUrl.toString()],
+  redirectUris: [redirectUrl.toString(), redirectURL.toString()],
   scopes: scopes.split(" "),
   state: "123",
   httpTimeout: 3000, // ms (optional)
@@ -60,12 +59,7 @@ export const connect = async (req: Request, res: Response) => {
 export const callback = async (req: Request, res: Response) => {
   try {
     const tokenSet: TokenSet = await xero.apiCallback(req.url);
-    console.log(req.url, "req.url");
-
-    console.log(tokenSet.expired() ? "expired" : "valid");
-
     await xero.updateTenants();
-    console.log("updateTenants");
 
     const decodedIdToken: XeroIdToken = jwtDecode(tokenSet.id_token!);
     const decodedAccessToken: XeroAccessToken = jwtDecode(
@@ -85,8 +79,8 @@ export const callback = async (req: Request, res: Response) => {
     res.redirect(
       `https://condescending-dijkstra-2075e8.netlify.app/newBook/xero`
     );
-  } catch (err) {    
-    console.log(JSON.stringify(err), "err");
+  } catch (err) {
+    //console.log(JSON.stringify(err), "err");
     res.send("Sorry, something went wrong !!");
   }
 };
@@ -119,7 +113,7 @@ export const getJournlas = async (req: Request, res: Response) => {
       offset,
       paymentsOnly
     );
-    console.log(response.body, "AQUIII");
+    //console.log(response.body, "AQUIII");
     res.send({ body: response.body, status: response.response.statusCode });
   } catch (err) {
     console.log(err, "err");
