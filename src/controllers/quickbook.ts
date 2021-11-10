@@ -15,7 +15,7 @@ const redirectUrl = "https://littlenewtback.herokuapp.com/qb/callback";
 const oauthClient = new OAuthClient({
   clientId: client_id,
   clientSecret: client_secret,
-  environment: "sandbox",
+  environment: "production",
   redirectUri: redirectUrl,
 });
 let oauth2_token_json = null;
