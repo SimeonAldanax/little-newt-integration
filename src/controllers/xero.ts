@@ -29,7 +29,7 @@ const scopes: string =
 const xero = new XeroClient({
   clientId: client_id.toString(),
   clientSecret: client_secret.toString(),
-  redirectUris: [redirectUrl.toString(), redirectURL.toString()],
+  redirectUris: [redirectURL.toString(), redirectUrl.toString(), ],
   scopes: scopes.split(" "),
   state: "123",
   httpTimeout: 3000, // ms (optional)
