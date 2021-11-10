@@ -39,10 +39,10 @@ export const callbackqb = async (req: Request, res: Response) => {
     const response = await oauthClient.createToken(req.url);
     oauth2_token_json = JSON.stringify(response.getJson(), null, 2);
 
-    res.redirect(`http://localhost:3000/newBook/quickbook`);
-    // res.redirect(
-    //   `https://condescending-dijkstra-2075e8.netlify.app/newBook/quickbook`
-    // );
+    //res.redirect(`http://localhost:3000/newBook/quickbook`);
+    res.redirect(
+      `https://condescending-dijkstra-2075e8.netlify.app/newBook/quickbook`
+    );
   } catch (err) {
     console.log(err, "err");
     res.send("Sorry, something went wrong 2");
